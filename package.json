@@ -1,0 +1,19 @@
+{
+  "name": "packageing",
+  "version": "1.0.0",
+  "description": "Learning full course of nodejs & express js",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": " nodemon app.js"
+  },
+  "author": "Dileep Thiriveedhi",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  },
+  "dependencies": {
+    "ejs": "^3.1.8",
+    "express": "^4.18.2"
+  }
+}
