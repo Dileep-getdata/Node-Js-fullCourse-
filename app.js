@@ -2,6 +2,7 @@ const express = require('express');
 const app=express();
 const bodyprase = require('body-parser');
 const path=require('path');
+const db=require('./util/dataBase');
 
 app.use(bodyprase.urlencoded({ extended: false }));
 
