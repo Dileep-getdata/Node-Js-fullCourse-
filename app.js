@@ -2,7 +2,7 @@ const express = require('express');
 const app=express();
 const bodyprase = require('body-parser');
 const path=require('path');
-const db=require('./util/dataBase');
+const sequelize=require('./util/dataBase');
 
 app.use(bodyprase.urlencoded({ extended: false }));
 
@@ -24,4 +24,9 @@ app.use(shopRouter);
 
 app.use(errorController.get404);
 
-app.listen(3000);
+sequelize.sync()
+.then((result)=>{
+    // console.log(result);
+    app.listen(3000);
+})
+.catch((err)=>console.log(err));

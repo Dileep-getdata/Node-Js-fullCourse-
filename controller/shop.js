@@ -28,17 +28,24 @@ exports.getProduct = (req, res, next) => {
 };
 
 exports.getIndex = (req, res, next) => {
-  Product.fetchAll()
-  .then(([rows,fileData])=> {
+  Product.findAll().then((result)=>{
     res.render('shop/index', {
-      prods: rows,
+      prods: result,
       pageTitle: 'Shop',
       path: '/'
     });
-  })
-  .catch((err)=>
-    console.log(err)
-  );
+  }).catch()
+  // Product.fetchAll()
+  // .then(([rows,fileData])=> {
+  //   res.render('shop/index', {
+  //     prods: rows,
+  //     pageTitle: 'Shop',
+  //     path: '/'
+  //   });
+  // })
+  // .catch((err)=>
+  //   console.log(err)
+  // );
 };
 
 exports.getCart = (req, res, next) => {
