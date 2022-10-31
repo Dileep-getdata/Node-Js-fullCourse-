@@ -5,6 +5,8 @@ const path=require('path');
 const sequelize=require('./util/dataBase');
 const Product=require('./models/product');
 const User=require('./models/user');
+const Cart=require('./models/cart');
+const CartItem=require('./models/cart-items');
 
 app.use(bodyprase.urlencoded({ extended: false }));
 
@@ -21,6 +23,7 @@ app.set('views','views')
 // Setting static file for css
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Fixing the user
 app.use((req,res,next)=>{
     User.findByPk(1)
     .then(user=>{
@@ -38,8 +41,14 @@ app.use(errorController.get404);
 // Sequelize relatio association
 Product.belongsTo(User,{constraints:true,onDelete:'CASCADE'});
 User.hasMany(Product);
+Cart.belongsTo(User);
+User.hasOne(Cart);
+Cart.belongsToMany(Product,{through:CartItem});
+Product.belongsToMany(Cart,{through:CartItem});
+
 
 sequelize
+// .sync({force:true})
 .sync()
 .then(result=>{
    return User.findByPk(1);
@@ -50,7 +59,10 @@ sequelize
     return user;
 })
 .then((user)=>{
-    console.log(user);
+    return user.createCart();  
+   
+})
+.then(cart=>{
     app.listen(3000);
 })
 .catch((err)=>console.log(err));
