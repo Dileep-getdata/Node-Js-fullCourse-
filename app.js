@@ -7,13 +7,13 @@ const Product=require('./models/product');
 const User=require('./models/user');
 const Cart=require('./models/cart');
 const CartItem=require('./models/cart-items');
-
-app.use(bodyprase.urlencoded({ extended: false }));
+const cors=require('cors');
+app.use(bodyprase.json());
 
 // error page
 const errorController = require('./controller/error');
 
-
+app.use(cors());
 // Import Router
 const adminRouter=require('./router/admin');
 const shopRouter=require('./router/shop');
