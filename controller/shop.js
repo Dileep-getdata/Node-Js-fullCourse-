@@ -76,7 +76,7 @@ exports.getOrders = (req, res, next) => {
 };
 
 exports.postCart=(req,res,next)=>{
-  const prodId=req.params.productId;
+  const prodId=req.body.productId;
   let newQuantity=1;
   console.log('Product ID:'+prodId)
   let fetchCart;
@@ -89,8 +89,7 @@ exports.postCart=(req,res,next)=>{
       let product;
       if(products.length>0){
         product=products[0];
-      }
-      
+      }      
       if(product){
         const oldQuantity=product.cartItem.quantity;
         newQuantity=oldQuantity+1;
@@ -105,9 +104,11 @@ exports.postCart=(req,res,next)=>{
     
   })
   .then(()=>{
-    res.redirect('/cart')
+    res.status(200).json({success:true,message:'Successfully added to cart'})
   })
-  .catch(err=>console.log(err))
+  .catch((err)=>{
+    res.status(500).json({success:false,message:'Error occured'})
+  });
  
 }
 
@@ -121,8 +122,9 @@ exports.postCartDelete=(req,res,next)=>{
     const product=products[0];
     return product.cartItem.destroy();
   })
-  .then(result=>{
-    res.redirect('/cart')
+  .then(()=>{
+    // res.redirect('/cart')
+    res.status(200).json({success:true,message:'Successfully removes item from cart'})
   })
   .catch(err=>console.log(err))
 }

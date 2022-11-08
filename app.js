@@ -8,6 +8,7 @@ const User=require('./models/user');
 const Cart=require('./models/cart');
 const CartItem=require('./models/cart-items');
 const cors=require('cors');
+
 app.use(bodyprase.json());
 
 // error page
@@ -38,6 +39,9 @@ app.use(shopRouter);
 
 app.use(errorController.get404);
 
+
+
+
 // Sequelize relatio association
 Product.belongsTo(User,{constraints:true,onDelete:'CASCADE'});
 User.hasMany(Product);
@@ -45,7 +49,6 @@ Cart.belongsTo(User);
 User.hasOne(Cart);
 Cart.belongsToMany(Product,{through:CartItem});
 Product.belongsToMany(Cart,{through:CartItem});
-
 
 sequelize
 // .sync({force:true})
@@ -63,6 +66,6 @@ sequelize
    
 })
 .then(cart=>{
-    app.listen(3000);
+    app.listen(2100);
 })
 .catch((err)=>console.log(err));
