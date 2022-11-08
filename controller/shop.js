@@ -1,10 +1,28 @@
 const Product = require('../models/product');
 const Cart=require('../models/cart');
+const item_per_page=2;
 
 exports.getProducts = (req, res, next) => {
-  Product.findAll()
+  const page=+req.query.page || 1;
+  let totalItem;
+  Product.count()
+  .then(totalProducts=>{
+    totalItem=totalProducts;
+    return Product.findAll({
+      offset:(page-1)*item_per_page,
+      limit:item_per_page
+    })
+  })
   .then((product)=>{
-    res.json({product,success:true});
+    res.json({
+      product:product,
+      currentPage:page,
+      hasNextPage: item_per_page * page < totalItem,
+      nextPage:page+1,
+      hasPreviousPage: page>1,
+      previousPage: page-1,
+      lastPage: Math.ceil(totalItem / item_per_page),
+    });
     // res.render('shop/product-list', {
     //   prods: product,
     //   pageTitle: 'All Products',
@@ -30,7 +48,11 @@ exports.getProduct = (req, res, next) => {
 };
 
 exports.getIndex = (req, res, next) => {
-  Product.findAll().then((result)=>{
+  const page=req.query.page;
+  console.log(page);
+   Product.findAll() 
+  
+  .then((result)=>{
     res.render('shop/index', {
       prods: result,
       pageTitle: 'Shop',
@@ -113,6 +135,9 @@ exports.postCart=(req,res,next)=>{
 }
 
 exports.postCartDelete=(req,res,next)=>{
+  if(!req.body.productId){
+    res.status(400).json({success:false,message:'Error at sending product ID'})
+  }
   const prodId=req.body.productId
   req.user.getCart()
   .then((cart)=>{
@@ -126,7 +151,9 @@ exports.postCartDelete=(req,res,next)=>{
     // res.redirect('/cart')
     res.status(200).json({success:true,message:'Successfully removes item from cart'})
   })
-  .catch(err=>console.log(err))
+  .catch(()=>{
+    res.status(500).json({success:false,message:'Error at removeing item from cart'})
+  })
 }
 
 exports.getCheckout = (req, res, next) => {
