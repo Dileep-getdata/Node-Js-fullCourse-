@@ -2,6 +2,7 @@ const Product = require('../models/product');
 const Cart=require('../models/cart');
 const Order=require('../models/order');
 
+
 const item_per_page=2;
 
 exports.getProducts = (req, res, next) => {
@@ -93,10 +94,18 @@ exports.getCart = (req, res, next) => {
 };
 
 exports.getOrders = (req, res, next) => {
-  res.render('shop/orders', {
-    path: '/orders',
-    pageTitle: 'Your Orders'
-  });
+  req.user.getOrders({include: ['products']})
+  .then(orders=>{
+    console.log('order:--'+JSON.stringify(orders));
+    res.json(orders);
+    // res.render('shop/orders', {
+    //   path: '/orders',
+    //   pageTitle: 'Your Orders',
+    //   orders:orders
+    // });
+  })
+  .catch(err=>console.log(err));
+ 
 };
 
 exports.postCart=(req,res,next)=>{
@@ -174,7 +183,7 @@ exports.postOrder=(req,res,next)=>{
     .catch(err=>console.log(err))
   })
   .then(result=>{
-    res.redirect('/order');
+    res.status(200).json({success:true,message:'Successfully added to order'});
   })
   .catch(err=>console.log(err))
 }

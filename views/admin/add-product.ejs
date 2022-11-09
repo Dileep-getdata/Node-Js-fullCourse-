@@ -5,24 +5,24 @@
 
 <body>
    <%- include('../includes/navigation.ejs') %>
-
+<!-- <% if (editing) { %>edit-product<% } else { %>add-product<% } %> -->
     <main>
-        <form class="product-form" action="/admin/<% if (editing) { %>edit-product<% } else { %>add-product<% } %>" method="POST">
+        <form class="product-form" action="/admin/addproducts" method="POST">
             <div class="form-control">
                 <label for="title">Title</label>
-                <input type="text" name="title" id="title" value="<% if (editing) { %><%= product.title%><%  }%>">
+                <input type="text" name="title" id="title" >
             </div>
             <div class="form-control">
                 <label for="imageUrl">Image URL</label>
-                <input type="text" name="imageUrl" id="imageUrl" value="<% if (editing) { %><%= product.imageUrl%><%  }%>">
+                <input type="text" name="imageUrl" id="imageUrl" >
             </div>
             <div class="form-control">
                 <label for="price">Price</label>
-                <input type="number" name="price" id="price" step="0.01" value="<% if (editing) { %><%= product.price%><%  }%>">
+                <input type="number" name="price" id="price" step="0.01" >
             </div>
             <div class="form-control">
                 <label for="description">Description</label>
-                <textarea name="description" id="description" rows="5" ><% if (editing) { %><%= product.description%><%  }%></textarea>
+                <textarea name="description" id="description" rows="5" ></textarea>
             </div>
             <% if (editing) { %>
                 <input type="hidden" name="productId" value="<%= product.id %>">
@@ -31,4 +31,37 @@
             <button class="btn" type="submit"><% if (editing) { %>Update Product<% } else { %>Add Product<% } %></button>
         </form>
     </main>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        const formdata=document.querySelector('.product-form');
+        const productname=document.querySelector('#title');
+        const productimg=document.querySelector('#imageUrl');
+        const productprice= document.querySelector('#price');
+        const productdes=document.querySelector('#description');
+formdata.addEventListener('submit',(e)=>{
+    e.preventDefault()
+    let obj={
+  
+  title:productname.value,
+  imageUrl:productimg.value,
+  price:productprice.value, 
+  description:productdes.value,
+  
+  
+}    
+productdes.value="";
+productimg.value='';
+productname.value="";
+productprice.value="";
+// console.log('this:----'+obj);
+    axios.post('http://localhost:2100/admin/addproducts',obj)
+    .then(result=>{
+        // console.log('result:---'+result);
+
+    })
+    .catch(err=>{
+        console.log(err);
+    })
+});
+    </script>
 <%- include('../includes/end.ejs') %>

@@ -4,22 +4,30 @@ const Product = require('../models/product');
 exports.getAddProduct = (req, res, next) => {
   res.render('admin/add-product', {
     pageTitle: 'Add Product',
-    path: '/admin/add-product',
+    path: '/admin/addproducts',
     editing:false
   });
 };
 
 exports.postAddProduct = (req, res, next) => {
-  
-  const title = req.body.title;
-  const imageUrl = req.body.imageUrl;
-  const price = req.body.price;
-  const description = req.body.description;
- console.log(req.body.ti)
-  
-  
-  
- 
+
+    const { title,imageUrl, price, description } = req.body;
+    // console.log('title:---'+title);    
+        req.user.createProduct({
+          title,
+          imageUrl,
+          price,
+          description,
+          // userId
+        
+        })
+          .then((result) => {
+            res.json(result);
+          })
+          .catch((err) => {
+            res.json(err);
+          });  
+
 };
 
 exports.getEditProduct = (req, res, next) => {
