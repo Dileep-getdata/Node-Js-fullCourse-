@@ -1,5 +1,7 @@
 const Product = require('../models/product');
 const Cart=require('../models/cart');
+const Order=require('../models/order');
+
 const item_per_page=2;
 
 exports.getProducts = (req, res, next) => {
@@ -77,12 +79,12 @@ exports.getCart = (req, res, next) => {
   .then(cart=>{
     cart.getProducts()
     .then(products=>{
-      res.json({products,success:true})
-      // res.render('shop/cart', {
-      //   path: '/cart',
-      //   pageTitle: 'Your Cart',
-      //   products:products
-      // });
+      // res.json({products,success:true})
+      res.render('shop/cart', {
+        path: '/cart',
+        pageTitle: 'Your Cart',
+        products:products
+      });
     })
     .catch(err=>console.log(err))
   })
@@ -154,6 +156,27 @@ exports.postCartDelete=(req,res,next)=>{
   .catch(()=>{
     res.status(500).json({success:false,message:'Error at removeing item from cart'})
   })
+}
+
+exports.postOrder=(req,res,next)=>{
+  req.user.getCart()
+  .then(cart=>{
+    return cart.getProducts();
+  })
+  .then(products=>{
+    return req.user.createOrder()
+    .then(order=>{
+      order.addProducts(products.map(product=>{
+         product.orderItem={quantity:product.cartItem.quantity};
+        return product;
+      }))
+    })
+    .catch(err=>console.log(err))
+  })
+  .then(result=>{
+    res.redirect('/order');
+  })
+  .catch(err=>console.log(err))
 }
 
 exports.getCheckout = (req, res, next) => {
