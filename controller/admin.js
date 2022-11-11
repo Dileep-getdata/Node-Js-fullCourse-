@@ -1,16 +1,19 @@
 
 const Product = require('../models/product');
 
+// GET METHOD -->'/admin/addproduct'
 exports.getAddProduct = (req, res, next) => {
   res.render('admin/add-product', {
     pageTitle: 'Add Product',
-    path: '/admin/addproducts',
+    path: '/admin/addproduct',
     editing:false
   });
 };
+// 
 
+
+// POST METHOD -->'/admin/addproduct'
 exports.postAddProduct = (req, res, next) => {
-
     const { title,imageUrl, price, description } = req.body;
     // console.log('title:---'+title);    
         req.user.createProduct({
@@ -26,21 +29,22 @@ exports.postAddProduct = (req, res, next) => {
           })
           .catch((err) => {
             res.json(err);
-          });  
+          }); 
 
 };
+// 
 
+
+// GET FOR EDIT PAGE -->'/edit-product/:productId'
 exports.getEditProduct = (req, res, next) => {
   const editMode=req.query.edit;
   if(!editMode){
     return res.redirect('/');
   }
   const prodId=req.params.productId;
-  req.user.getProducts({where:{id:prodId}})
-  
+  req.user.getProducts({where:{id:prodId}})  
   .then(products=>{
-    const product=products[0];
-    
+    const product=products[0];    
     if(!product){
       return res.redirect('/')
     }
@@ -51,13 +55,14 @@ exports.getEditProduct = (req, res, next) => {
       product:product
   })
 })
-  .catch(()=>{return res.redirect('/')});
-  
+  .catch(()=>{return res.redirect('/')});  
    
 };
+// 
 
-exports.postEditProduct=(req,res,next)=>{
-  
+
+// POST EDIT PAGE --> '/edit-product'
+exports.postEditProduct=(req,res,next)=>{  
   const updateProductId=req.body.productId;  
   const updatePrice=req.body.price;
   const updateImage=req.body.imageUrl;
@@ -75,10 +80,12 @@ exports.postEditProduct=(req,res,next)=>{
     console.log('UPDATED Product');
     res.redirect('/admin/products');
   })
-  .catch(err=>console.log(err));
-  
+  .catch(err=>console.log(err));  
 };
+// 
 
+
+// DELETE PRODUCT -->'/delete-product'
 exports.deleteProduct=(req,res,next)=>{
   const prodId=req.body.productId;
   const updatePrice=req.body.price;
@@ -88,18 +95,20 @@ exports.deleteProduct=(req,res,next)=>{
   
   Product.findByPk(prodId)
   .then((product)=>{
-    return product.destroy();
-    
+    return product.destroy();    
   })
   .then(result=>{
     console.log("DESTROYED Product");
     res.redirect('/admin/products');
   })
-  .catch((err)=>console.log(err)); 
-   
+  .catch((err)=>console.log(err));    
 }
+// 
 
+
+// GET METHOD -->'/products'
 exports.getProducts = (req, res, next) => {
+
   req.user.getProducts()
   .then((products)=>{
     res.render('admin/products', {
@@ -108,6 +117,6 @@ exports.getProducts = (req, res, next) => {
       path: '/admin/products'
     });
   })
-  .catch((err)=>console.log(err));  
- 
+  .catch((err)=>console.log(err));   
 };
+// 

@@ -7,7 +7,7 @@
    <%- include('../includes/navigation.ejs') %>
 <!-- <% if (editing) { %>edit-product<% } else { %>add-product<% } %> -->
     <main>
-        <form class="product-form" action="/admin/addproducts" method="POST">
+        <form class="product-form" action="/admin/addproduct" method="POST">
             <div class="form-control">
                 <label for="title">Title</label>
                 <input type="text" name="title" id="title" >
@@ -54,7 +54,7 @@ productimg.value='';
 productname.value="";
 productprice.value="";
 // console.log('this:----'+obj);
-    axios.post('http://localhost:2100/admin/addproducts',obj)
+    axios.post('http://localhost:2100/admin/addproduct',obj)
     .then(result=>{
         // console.log('result:---'+result);
 
