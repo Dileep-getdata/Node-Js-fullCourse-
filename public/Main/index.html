@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <title>E-Commerce page-1</title>
+    <script src="../script.js" defer></script>
+</head>
+<body>  
+    <div id="main-Container">
+        <header>
+            <ul class="header">
+                <li><a href="../Home/Home.html">HOME</a></li>
+                <li><a href="../Main/index.html">STORE</a></li>
+                <li><a href="../About/About.html">ABOUT </a></li>
+                <li><a href="../Order/Order.html">ORDERS </a></li>
+                <li style="float: right;" class="popCartBtn"><a href=""><span class="cart-no">0</span>🛒Cart</a></li>
+            </ul>
+            <hr>
+            
+            <h1>The Generics</h1>
+        </header>
+        <section class="product-section">
+            <h2>MUSIC</h2>
+
+            <div class="wrap-products" ></div>          
+          
+        </section>
+        <section class="pagination">
+
+        </section>
+        
+        <!-- <section class="product-section">
+            <h2>MERCH</h2>
+            <div id="tshirt1" class="wrap-products" >
+                <div class="each-product">
+                    <h3>T-shirt 1</h3>
+                    <div class="image"><img src="https://prasadyash2411.github.io/ecom-website/img/Shirt.png" alt="Printed shirt"></div>
+                    <div>
+                        <span class="span">
+                            $
+                            <span class="ammount">22.99</span>
+                        </span>
+                        <button id="product-5" class="addCrt-btn">Add to cart</button>
+                    </div>
+                </div>
+                <div  id="tshirt2" class="each-product">
+                    <h3>T-shirt 2</h3>
+                    <div class="image"><img src="https://prasadyash2411.github.io/ecom-website/img/Shirt.png" alt="Printed shirt"></div>
+                    <div class="product-bottom">
+                        <span class="span">
+                            $
+                            <span class="ammount">15.99</span>
+                        </span>
+                        <button id="product-5" class="addCrt-btn">Add to cart</button>
+                    </div>
+                </div>              
+               
+                
+            </div>
+        </section> -->
+
+        <section class="popUp-cart" style="float: right;">
+            <h2>CART</h2>
+            <button class="close">X</button>
+            <div class="table-head cart-row">
+                <span class=" cart-item cart-colomn">ITEM</span>
+                <span class=" cart-price cart-colomn">PRICE</span>
+                <span class=" cart-qunatity cart-colomn">QUANTITY</span>
+            </div>
+            <div class="cart-items">
+                
+            </div>
+            <div class="cart-total">
+                <span class="total-title"><strong>Total- $</strong></span>
+                
+                <span id="total-value">0.00</span>
+            </div>
+            <button class="payment-btn">PAYMENT</button>
+        </section>
+        <button class="check-cart-btn popCartBtn">
+            <a href="">Check cart</a>
+        </button>
+
+    </div>
+    <div id="container"></div>
+
+    <footer>
+        
+        <div class="footer-tittle"><h2>The Generics</h2></div>
+        <div class="footer-links">
+            <ul>
+                <li><a href="">Y</a></li>
+                <li><a href="">S</a></li>
+                <li><a href="">F</a></li>
+            </ul>
+        </div>
+    
+    </footer>
+    
+    
+</body>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</html>

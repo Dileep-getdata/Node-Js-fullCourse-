@@ -67,6 +67,12 @@ app.use(shopRouter);
 app.use(errorController.get404);
 // 
 
+// Front end response
+app.use((req,res)=>{
+    res.sendFile(path.join(__dirname,`public/${req.url}`));
+})
+// 
+
 
 
 
