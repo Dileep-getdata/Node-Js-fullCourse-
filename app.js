@@ -7,16 +7,20 @@ const express = require('express');
 const app=express();
 // 
 
+const dotenv=require('dotenv');
+dotenv.config();
+
 const path=require('path');
-const sequelize=require('./util/dataBase');
+// const sequelize=require('./util/dataBase');
+
 
 // import from Models
-const Product=require('./models/product');
-const User=require('./models/user');
-const Cart=require('./models/cart');
-const CartItem=require('./models/cart-items');
-const Order=require('./models/order');
-const OrderItem=require('./models/order-items');
+// const Product=require('./models/product');
+// const User=require('./models/user');
+// const Cart=require('./models/cart');
+// const CartItem=require('./models/cart-items');
+// const Order=require('./models/order');
+// const OrderItem=require('./models/order-items');
 // 
 
 
@@ -35,13 +39,16 @@ app.use(bodyprase.json());
 
 // error page
 const errorController = require('./controller/error');
+app.use(errorController.get404);
 // 
 
 
 
 // Import Router
 const adminRouter=require('./router/admin');
-const shopRouter=require('./router/shop');
+// const shopRouter=require('./router/shop');
+app.use('/admin',adminRouter);
+// app.use(shopRouter);
 // 
 
 // Initailising ejs ,directly render to views folder
@@ -54,66 +61,74 @@ app.use(express.static(path.join(__dirname, 'public')));
 // 
 
 // Fixing the user
-app.use((req,res,next)=>{
-    User.findByPk(1)
-    .then(user=>{
-        req.user=user;
-        next();
-    })
-    .catch(err=> console.log(err));
-})
-app.use('/admin',adminRouter);
-app.use(shopRouter);
-app.use(errorController.get404);
+// app.use((req,res,next)=>{
+    // User.findByPk(1)
+    // .then(user=>{
+    //     req.user=user;
+    //     next();
+    // })
+    // .catch(err=> console.log(err));
+// })
+
+
 // 
 
-// Front end response
+// // Front end response
 app.use((req,res)=>{
     res.sendFile(path.join(__dirname,`public/${req.url}`));
 })
-// 
+// // 
 
 
 
 
-// Sequelize relatio association
-Product.belongsTo(User,{constraints:true,onDelete:'CASCADE'});
-User.hasMany(Product);
+// // Sequelize relatio association
+// Product.belongsTo(User,{constraints:true,onDelete:'CASCADE'});
+// User.hasMany(Product);
 
-Cart.belongsTo(User);
-User.hasOne(Cart);
+// Cart.belongsTo(User);
+// User.hasOne(Cart);
 
-Cart.belongsToMany(Product,{through:CartItem});
-Product.belongsToMany(Cart,{through:CartItem});
+// Cart.belongsToMany(Product,{through:CartItem});
+// Product.belongsToMany(Cart,{through:CartItem});
 
-Order.belongsTo(User);
-User.hasMany(Order);
+// Order.belongsTo(User);
+// User.hasMany(Order);
 
-Order.belongsToMany(Product,{through:OrderItem});
-Product.belongsToMany(Order,{through:OrderItem});
-// 
+// Order.belongsToMany(Product,{through:OrderItem});
+// Product.belongsToMany(Order,{through:OrderItem});
+// // 
 
 
-//---> sync():- is used to synchronize your Sequelize model with your database tables. 
-// The synchronization happens at the table level. 
-// When your table doesn't exist the sync() method will generate and run a CREATE TABLE statement for you.
+// //---> sync():- is used to synchronize your Sequelize model with your database tables. 
+// // The synchronization happens at the table level. 
+// // When your table doesn't exist the sync() method will generate and run a CREATE TABLE statement for you.
 
-sequelize
-// .sync({force:true})
-.sync()
-.then(result=>{
-   return User.findByPk(1);
-}).then(user=>{
-    if(!user){
-        return User.create({userName:'Tester1',email:'tester1@gmail.com'})
-    }
-    return user;
-})
-.then((user)=>{
-    return user.createCart();    
-})
-.then(cart=>{
+// sequelize
+// // .sync({force:true})
+// .sync()
+// .then(result=>{
+//    return User.findByPk(1);
+// }).then(user=>{
+//     if(!user){
+//         return User.create({userName:'Tester1',email:'tester1@gmail.com'})
+//     }
+//     return user;
+// })
+// .then((user)=>{
+//     return user.createCart();    
+// })
+// .then(cart=>{
+//     app.listen(2100);
+// })
+// .catch((err)=>console.log(err));
+// // 
+
+// MongoDB
+const mongoConnect=require('./util/dataBase').mongoConnect;
+console.log(mongoConnect);
+mongoConnect(client=>{
+    
+    console.log(client);
     app.listen(2100);
 })
-.catch((err)=>console.log(err));
-// 
