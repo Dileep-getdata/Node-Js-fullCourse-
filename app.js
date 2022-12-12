@@ -15,8 +15,8 @@ const path=require('path');
 
 
 // import from Models
-// const Product=require('./models/product');
-// const User=require('./models/user');
+const Product=require('./models/product');
+const User=require('./models/user');
 // const Cart=require('./models/cart');
 // const CartItem=require('./models/cart-items');
 // const Order=require('./models/order');
@@ -61,14 +61,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 // 
 
 // Fixing the user
-// app.use((req,res,next)=>{
-    // User.findByPk(1)
-    // .then(user=>{
-    //     req.user=user;
-    //     next();
-    // })
-    // .catch(err=> console.log(err));
-// })
+app.use((req,res,next)=>{
+    User.findById(1)
+    .then(user=>{
+        req.user=user;
+        next();
+    })
+    .catch(err=> console.log(err));
+})
 
 
 // 
