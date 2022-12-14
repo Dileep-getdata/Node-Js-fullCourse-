@@ -82,22 +82,22 @@ const Order=require('../models/order');
 // // -----------------------CART--------------------
 // // 
 // // GET CART -->'/cart'
-// exports.getCart = (req, res, next) => {
-//   req.user.getCart()
-//   .then(cart=>{    
-//     cart.getProducts()
-//     .then(products=>{
-//       res.json({products,success:true})
-//       // res.render('shop/cart', {
-//       //   path: '/cart',
-//       //   pageTitle: 'Your Cart',
-//       //   products:products
-//       // });
-//     })
-//     .catch(err=>console.log(err))
-//   })
-//   .catch(err=>console.log(err))  
-// };
+exports.getCart = (req, res, next) => {
+  req.user.getCart()
+  .then(cart=>{    
+    cart.getProducts()
+    .then(products=>{
+      res.json({products,success:true})
+      // res.render('shop/cart', {
+      //   path: '/cart',
+      //   pageTitle: 'Your Cart',
+      //   products:products
+      // });
+    })
+    .catch(err=>console.log(err))
+  })
+  .catch(err=>console.log(err))  
+};
 // // 
 
 // // POST CART DATA -->'/cart'
@@ -150,6 +150,24 @@ exports.postCart=(req,res,next)=>{
 // // 
 // // 
 // // DELETE ITEM FROM CART -->'/cart-delete-item'
+exports.postCartDelete=(req,res,next)=>{
+  if(!req.body.productId){
+    res.status(400).json({success:false,message:'Error at sending product ID'})
+  }
+  const prodId=req.body.productId
+  req.user
+  .deleteCartItems(prodId)
+  
+  .then(()=>{
+    res.redirect('/cart')
+    res.status(200).json({success:true,message:'Successfully removes item from cart'})
+  })
+  .catch(()=>{
+    res.status(500).json({success:false,message:'Error at removeing item from cart'})
+  })
+} 
+
+
 // exports.postCartDelete=(req,res,next)=>{
 //   if(!req.body.productId){
 //     res.status(400).json({success:false,message:'Error at sending product ID'})
