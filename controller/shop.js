@@ -198,22 +198,35 @@ exports.postCartDelete=(req,res,next)=>{
 // // ------------------------ORDER PAGE-------------------------
 // // 
 // // GET THE ORDERS PAGE -->'/orders'
-// exports.getOrders = (req, res, next) => {
-//   // {include: ['products']}
-//   req.user.getOrders({include:['products']})
-//   .then(orders=>{        
-//       res.json({orders,success:true});  
-//     // res.render('shop/orders', {
-//     //   path: '/orders',
-//     //   pageTitle: 'Your Orders',
-//     //   orders:orders
-//     // });
-//   })
-//   .catch(err=>console.log(err)); 
-// };
+exports.getOrders = (req, res, next) => {
+  // {include: ['products']}
+  // req.user.getOrders({include:['products']})
+
+  req.user.getOrders()
+  .then(orders=>{        
+      res.json({orders,success:true});  
+    res.render('shop/orders', {
+      path: '/orders',
+      pageTitle: 'Your Orders',
+      orders:orders
+    });
+  })
+  .catch(err=>console.log(err)); 
+};
 // // 
 // // 
 // // POST DATA TO ORDER FROM CART PAGE -->'/create-order'
+exports.postOrder=(req,res,next)=>{
+    
+    req.user.addOrder()    
+    .then(result=>{      
+      res.status(200).json({success:true,message:'Successfully added to order'});
+    })
+    .catch(err=>{
+      res.status(500).json({success:false,message:'Error  adding to order'});
+    });
+  }
+
 // exports.postOrder=(req,res,next)=>{
 //   let fetchCart;
 //   req.user.getCart()
