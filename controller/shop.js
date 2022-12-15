@@ -6,74 +6,74 @@ const Order=require('../models/order');
 
 // // <<<<<<<<----  GET ALL PRODUCTS -->'/getAllProduct'---- >>>>>>>
 // // 
-// exports.getAllProducts=(req,res,next)=>{
-//   Product.findAll()
-//   .then(response=>{
-//     res.json({result:response});
-//   }).catch(err=>console.log(err));
-// } 
+exports.getAllProducts=(req,res,next)=>{
+  Product.find()
+  .then(response=>{
+    res.json({result:response});
+  }).catch(err=>console.log(err));
+} 
 // // ==============================================================
 
 
 
 // // <<<<<<<<<-----GET PRODUCTS PAGE -->'/products' ------->>>>>>>
 // // 
-// exports.getProducts = (req, res, next) => {
-//   const page = req.query.page ;   
-//   Product.findAll({    
-//     limit:item_per_page,
-//     offset:page*item_per_page
-//   })
-//   .then(product=>{
-//     res.json({result:product})
-//   })
-//   .catch(err=>console.log(err));
-// };
+exports.getProducts = (req, res, next) => {
+  const page = req.query.page ;   
+  Product.find({    
+    limit:item_per_page,
+    offset:page*item_per_page
+  })
+  .then(product=>{
+    res.json({result:product})
+  })
+  .catch(err=>console.log(err));
+};
 // // ===================================================================
 
 
     
 // // <<<<<<<<<-----GET EACH PRODUCT DETAILS -->'/product/:productId'------->>>>>>>
 // // 
-// exports.getProduct = (req, res, next) => {
-//   const prodId=req.params.productId ;
-//   Product.findByPk(prodId)
-//   .then((product)=>{
-//     res.render('shop/product-details',{
-//       product:product,
-//       pageTitle:product.title,
-//       path:'/product'
-//     });
-//   }).catch((err)=>console.log(err)); 
+exports.getProduct = (req, res, next) => {
+  const prodId=req.params.productId ;
+  Product.findById(prodId)
+  .then((product)=>{
+    res.render('shop/product-details',{
+      product:product,
+      pageTitle:product.title,
+      path:'/product'
+    });
+  }).catch((err)=>console.log(err)); 
   
-// };
+};
 // // ===========================================================
 
 
 // //----------------- GET INDEX PAGE '/'
-// exports.getIndex = (req, res, next) => {
-//   const page=req.query.page;
-//   console.log(page);
-//   Product.findAll()   
-//   .then((result)=>{
-//     res.render('shop/index', {
-//       prods: result,
-//       pageTitle: 'Shop',
-//       path: '/'
-//     });
-//   }).catch((err)=>console.log(err));
-//   // Product.fetchAll()
-//   // .then(([rows,fileData])=> {
-//   //   res.render('shop/index', {
-//   //     prods: rows,
-//   //     pageTitle: 'Shop',
-//   //     path: '/'
-//   //   });
-//   // })
-//   // .catch((err)=>
-//   //   console.log(err)
-//   // );
-// };
+exports.getIndex = (req, res, next) => {
+  const page=req.query.page;
+  console.log(page);
+  Product.find()   
+  .then((result)=>{
+    res.render('shop/index', {
+      prods: result,
+      pageTitle: 'Shop',
+      path: '/'
+    });
+  }).catch((err)=>console.log(err));
+  // Product.fetchAll()
+  // .then(([rows,fileData])=> {
+  //   res.render('shop/index', {
+  //     prods: rows,
+  //     pageTitle: 'Shop',
+  //     path: '/'
+  //   });
+  // })
+  // .catch((err)=>
+  //   console.log(err)
+  // );
+};
 // // ========================================================
 
 

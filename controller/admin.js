@@ -18,7 +18,7 @@ exports.getAddProduct = (req, res, next) => {
 exports.postAddProduct = (req, res, next) => {
     const { title,imageUrl, price, description } = req.body;
     // console.log('title:---'+title);    
-      const product=new Product(title,price,imageUrl,description,null,req.user._id);
+      const product=new Product({title:title,price:price,imageUrl:imageUrl,description:description});
         product.save()
           .then((result) => {
             res.json(result);
@@ -66,8 +66,20 @@ exports.postEditProduct=(req,res,next)=>{
   const updateTitle=req.body.title;
   const updateDescription=req.body.description;
 
-  const product=new Product(updateTitle,updateImage,updatePrice,updateDescription,updateProductId);
-  
+  Product.findById(updateProductId)
+  .then(product=>{
+    product.title=updateTitle;
+    product.price=updatePrice;
+    product.imageUrl=updateImage;
+    product.description=updateDescription;
+    return product.save()
+  })
+  .then(result=>{
+    console.log('UPDATED Product');
+    res.redirect('/admin/products');
+  })
+  .catch(err=>console.log(err));  
+};
   // Product.findByPk(updateProductId)
   // .then(product=>{
   //   product.title=updateTitle;
@@ -76,13 +88,7 @@ exports.postEditProduct=(req,res,next)=>{
   //   product.description=updateDescription;
   //   return product.save();
   // })
-  product.save()
-  .then(result=>{
-    console.log('UPDATED Product');
-    res.redirect('/admin/products');
-  })
-  .catch(err=>console.log(err));  
-};
+ 
 // // 
 
 
@@ -95,7 +101,7 @@ exports.deleteProduct=(req,res,next)=>{
   const updateDescription=req.body.description;
   
   // Product.findByPk(prodId)
-  Product.deleteById(prodId)
+  Product.findByIdAndRemove(prodId) //Mongoose inbuilt method for deleting by ID 'findByIdAndRemove'
   .then((product)=>{
     return product.destroy();    
   })

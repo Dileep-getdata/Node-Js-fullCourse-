@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose=require('mongoose');
 
 // ---> Middleware:-  (Middleware is software that lies between an operating system and the applications running on it.
 //  Essentially functioning as hidden translation layer, 
@@ -125,10 +126,17 @@ app.use((req,res)=>{
 // // 
 
 // MongoDB
-const mongoConnect=require('./util/dataBase').mongoConnect;
-console.log(mongoConnect);
-mongoConnect(client=>{
-    
-    console.log(client);
+
+mongoose
+.connect('mongodb+srv://dileeept:Z1eyJ2W1wbda7piO@expensive-tracker.pnvtj0e.mongodb.net/?retryWrites=true&w=majority')
+.then(result=>{
     app.listen(2100);
 })
+.catch(err=>console.log(err))
+
+// const mongoConnect=require('./util/dataBase').mongoConnect;
+// console.log(mongoConnect)
+// mongoConnect(client=>{    
+//     console.log(client);
+//     app.listen(2100);
+// })
