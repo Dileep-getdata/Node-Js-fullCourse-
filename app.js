@@ -63,7 +63,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Fixing the user
 app.use((req,res,next)=>{
-    User.findById(1)
+    User.findById('????????')
     .then(user=>{
         req.user=user;
         next();
@@ -130,6 +130,19 @@ app.use((req,res)=>{
 mongoose
 .connect('mongodb+srv://dileeept:Z1eyJ2W1wbda7piO@expensive-tracker.pnvtj0e.mongodb.net/?retryWrites=true&w=majority')
 .then(result=>{
+    User.findOne()
+    .then(user=>{
+        if(!user){
+            const user=new user({
+                name:'Max',
+                email:'maxwell@gmail.com',
+                cart:{
+                    items:[]
+                }
+            })
+            user.save();
+        }
+    })
     app.listen(2100);
 })
 .catch(err=>console.log(err))

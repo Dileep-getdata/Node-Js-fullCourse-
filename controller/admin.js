@@ -1,6 +1,7 @@
 
 const Product = require('../models/product');
 const mongodb=require('mongodb');
+const { title } = require('process');
 const ObjectId=mongodb.ObjectId;
 
 // GET METHOD -->'/admin/addproduct'
@@ -18,7 +19,14 @@ exports.getAddProduct = (req, res, next) => {
 exports.postAddProduct = (req, res, next) => {
     const { title,imageUrl, price, description } = req.body;
     // console.log('title:---'+title);    
-      const product=new Product({title:title,price:price,imageUrl:imageUrl,description:description});
+      const product=new Product({
+        title:title,
+        price:price,
+        imageUrl:imageUrl,
+        description:description,
+        userId:req.user
+      
+      });
         product.save()
           .then((result) => {
             res.json(result);
@@ -115,16 +123,21 @@ exports.deleteProduct=(req,res,next)=>{
 
 
 // // GET METHOD -->'/products'
-// exports.getProducts = (req, res, next) => {
+exports.getProducts = (req, res, next) => {
 
-//   req.user.getProducts()
-//   .then((products)=>{
-//     res.render('admin/products', {
-//       prods: products,
-//       pageTitle: 'Admin Products',
-//       path: '/admin/products'
-//     });
-//   })
-//   .catch((err)=>console.log(err));   
-// };
+  Product.find()
+  // populate: It allows us to tell the mongoose populate certain field with all details information and not just ID, It also used for 'which we can add after find()'.
+
+// Select: It allows us to which field we want to  select or un-select.
+  // .select('title price -_id')
+  // .populate('userId')
+  .then((products)=>{
+    res.render('admin/products', {
+      prods: products,
+      pageTitle: 'Admin Products',
+      path: '/admin/products'
+    });
+  })
+  .catch((err)=>console.log(err));   
+};
 // // 
