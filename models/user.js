@@ -37,6 +37,10 @@ userSchema.methods.addToCart=function(product){
     this.cart=updateCart;
     return this.save();
 }
+userSchema.methods.clearCart=function(){
+    this.cart={items:[]};
+    return this.save();
+}
 
 userSchema.methods.deleteCartItems=function(productId){
     const updateCartItems=this.cart.items.filter(item=>{

@@ -200,8 +200,7 @@ exports.postCartDelete=(req,res,next)=>{
 exports.getOrders = (req, res, next) => {
   // {include: ['products']}
   // req.user.getOrders({include:['products']})
-
-  req.user.getOrders()
+  Order.find('user.userId':req.user._id)  
   .then(orders=>{        
       res.json({orders,success:true});  
     res.render('shop/orders', {
@@ -216,14 +215,39 @@ exports.getOrders = (req, res, next) => {
 // // 
 // // POST DATA TO ORDER FROM CART PAGE -->'/create-order'
 exports.postOrder=(req,res,next)=>{
-    
-    req.user.addOrder()    
-    .then(result=>{      
+  req.user
+  .populate('cart.items.productId')
+  .execPopulate()  
+  .then(user=>{
+    const products=user.cart.items.map(i=>{
+      return {qunatity:i.qunatity,product:{...i.productId._doc}};
+    });
+    const order=new Order({
+      user:{
+        name:req.user.name,
+        userId:req.user
+      },
+      products:products
+    })
+    return order.save();
+  }).then(result=>{ 
+    return req.user.clearCart();     
+    })
+    .then(()=>{
       res.status(200).json({success:true,message:'Successfully added to order'});
+
     })
     .catch(err=>{
-      res.status(500).json({success:false,message:'Error  adding to order'});
-    });
+        res.status(500).json({success:false,message:'Error  adding to order'});
+      });
+  
+    // req.user.addOrder()    
+    // .then(result=>{      
+    //   res.status(200).json({success:true,message:'Successfully added to order'});
+    // })
+    // .catch(err=>{
+    //   res.status(500).json({success:false,message:'Error  adding to order'});
+    // });
   }
 
 // exports.postOrder=(req,res,next)=>{
