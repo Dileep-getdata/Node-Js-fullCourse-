@@ -83,18 +83,18 @@ exports.getIndex = (req, res, next) => {
 // // 
 // // GET CART -->'/cart'
 exports.getCart = (req, res, next) => {
-  req.user.getCart()
-  .then(cart=>{    
-    cart.getProducts()
-    .then(products=>{
-      res.json({products,success:true})
+  req.user
+  .populate('cart.items.productId')
+  .execPopulate()
+  .then(user=>{  
+    const products=user.cart.items;      
+    res.json({products,success:true})
       // res.render('shop/cart', {
       //   path: '/cart',
       //   pageTitle: 'Your Cart',
       //   products:products
       // });
-    })
-    .catch(err=>console.log(err))
+   
   })
   .catch(err=>console.log(err))  
 };

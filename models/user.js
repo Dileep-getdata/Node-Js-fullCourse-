@@ -12,13 +12,34 @@ const userSchema=Schema({
     },
     cart:{
         items:[{
-            products:{type:Schema.Types.ObjectId,ref:'Product',required:true},
+            productId:{type:Schema.Types.ObjectId,ref:'Product',required:true},
             quantity:{type:Number,required:true}
         }]
     }
 })
 
+userSchema.methods.addToCart=function(product){
+    const cartProductIndex=this.cart.items.findIndex(cp=>{
+        return cp.productId.toString() === product._id.tostring();
+    });
+    let newQuantity=1;
+    const updateCartItems=[...this.cart.items];
+    if(cartProductIndex>=0){
+        newQuantity=this.cart.items[cartProductIndex].quantity+1;
+        updateCartItems[cartProductIndex].quantity=newQuantity;
+    }else{
+        updateCartItems.push({
+            productId:product._id,
+            quantity:newQuantity
+        })
+    }
+    const updateCart={items:updateCartItems};
+    this.cart=updateCart;
+    return this.save();
+}
+
 module.exports=mongoose.model('User',userSchema);
+
 // const getDB=require('../util/dataBase').getDB;
 // const mongodb=require('mongodb');
 // const ObjectId=mongodb.ObjectId;
