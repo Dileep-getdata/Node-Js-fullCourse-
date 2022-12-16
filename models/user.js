@@ -38,6 +38,15 @@ userSchema.methods.addToCart=function(product){
     return this.save();
 }
 
+userSchema.methods.deleteCartItems=function(productId){
+    const updateCartItems=this.cart.items.filter(item=>{
+        return item.productId.toString() !== productId.toString();
+        
+    })
+    this.cart.items=updateCartItems;
+    return this.save();
+}
+
 module.exports=mongoose.model('User',userSchema);
 
 // const getDB=require('../util/dataBase').getDB;

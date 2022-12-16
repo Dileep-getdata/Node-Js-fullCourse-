@@ -156,8 +156,7 @@ exports.postCartDelete=(req,res,next)=>{
   }
   const prodId=req.body.productId
   req.user
-  .deleteCartItems(prodId)
-  
+  .deleteCartItems(prodId)  
   .then(()=>{
     res.redirect('/cart')
     res.status(200).json({success:true,message:'Successfully removes item from cart'})
